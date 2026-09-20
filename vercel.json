@@ -3,6 +3,10 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/api/sih-register-beekeeper", "destination": "/api/sih?action=register-beekeeper" },
+    { "source": "/api/sih-verify-farmer", "destination": "/api/sih?action=verify-farmer" },
+    { "source": "/api/sih-iot-telemetry", "destination": "/api/sih?action=iot-telemetry" },
+    { "source": "/api/sih/iot/telemetry", "destination": "/api/sih?action=iot-telemetry" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
