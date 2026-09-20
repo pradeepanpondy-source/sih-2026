@@ -48,3 +48,8 @@ coverage
 .temp
 .tmp
 .vercel
+
+# Blockchain
+blockchain/artifacts/
+blockchain/cache/
+blockchain/.env
