@@ -2,18 +2,15 @@ import { createClient } from '@supabase/supabase-js'
 
 // Use environment variables for Supabase configuration
 // In production, these should come from .env file
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+const defaultSupabaseUrl = 'https://uigjzcwdyfulrmmeyeys.supabase.co';
+const defaultAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZ2p6Y3dkeWZ1bHJtbWV5ZXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1MzUyNDYsImV4cCI6MjA3ODExMTI0Nn0.nwpTzz450fNh6vQRCpRX0dV0XqBxcOjny6eUkYQiYEA';
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase environment variables. Please check your .env file or Vercel settings.')
-}
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || defaultSupabaseUrl;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || defaultAnonKey;
 
-// Initialize client with whatever values we have. 
-// If values are empty, Supabase will fail gracefully on actual calls rather than crashing the whole React app on load.
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseKey || 'placeholder',
+  supabaseUrl,
+  supabaseKey,
   {
     auth: {
       autoRefreshToken: true,
