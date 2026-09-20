@@ -14,7 +14,16 @@ const Footer: React.FC = () => {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-gray-400 uppercase mb-4">Help</h3>
+          <h3 className="text-sm font-semibold text-yellow-400 uppercase mb-4">SIH 2026 Innovations</h3>
+          <ul className="space-y-2 text-sm">
+            <li><a href="/sih/hive-monitoring" className="hover:text-white font-semibold flex items-center gap-1.5"><span>🤖</span> AI Hive Health Monitoring</a></li>
+            <li><a href="/verify/HB-2026-000001" className="hover:text-white font-semibold flex items-center gap-1.5"><span>🛡️</span> Blockchain Honey Verification</a></li>
+            <li><a href="/seller/batches" className="hover:text-white font-semibold flex items-center gap-1.5"><span>🍯</span> Honey Batches & QR Codes</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold text-gray-400 uppercase mb-4">Help & Info</h3>
           <ul className="space-y-2 text-sm">
             <li><a href="/contact" className="hover:text-white font-semibold">Payments</a></li>
             <li><a href="/contact" className="hover:text-white font-semibold">Shipping</a></li>

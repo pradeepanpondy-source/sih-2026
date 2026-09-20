@@ -76,10 +76,12 @@ export default function Navigation() {
           </div>
 
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-10">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-7">
             {[
               { name: 'Home', path: '/home' },
               { name: 'Shop', path: '/shop' },
+              { name: 'AI Monitoring', path: '/sih/hive-monitoring', isSpecial: true, badge: 'AI' },
+              { name: 'Verify Honey', path: '/verify/HB-2026-000001', isSpecial: true, badge: 'Web3' },
               { name: 'About', path: '/about' },
               { name: 'Seller', path: '/seller', hidden: isSellerDashboard },
               { name: 'Contact', path: '/contact' },
@@ -89,12 +91,21 @@ export default function Navigation() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative font-bold text-sm uppercase tracking-widest transition-colors duration-300 group ${location.pathname === link.path
+                  className={`relative font-bold text-xs lg:text-sm uppercase tracking-wider transition-colors duration-300 group flex items-center gap-1.5 ${location.pathname === link.path
                     ? 'text-honeybee-primary'
                     : 'text-honeybee-secondary hover:text-honeybee-primary'
                     }`}
                 >
                   {link.name}
+                  {link.badge && (
+                    <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
+                      link.badge === 'AI' 
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xs' 
+                        : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
+                    }`}>
+                      {link.badge}
+                    </span>
+                  )}
                   <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-honeybee-primary transition-all duration-300 group-hover:w-full ${location.pathname === link.path ? 'w-full' : ''
                     }`}></span>
                 </Link>
@@ -185,6 +196,8 @@ export default function Navigation() {
               {[
                 { name: 'Home', path: '/home' },
                 { name: 'Shop', path: '/shop' },
+                { name: '🤖 AI Hive Health & Vision', path: '/sih/hive-monitoring' },
+                { name: '🛡️ Verify Honey (Blockchain)', path: '/verify/HB-2026-000001' },
                 { name: 'About', path: '/about' },
                 { name: 'Seller', path: '/seller' },
                 { name: 'Contact', path: '/contact' },

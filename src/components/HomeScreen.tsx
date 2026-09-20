@@ -106,12 +106,64 @@ export default function HomeScreen() {
             <Link to="/shop" className="hero-cta-primary">
               Shop Now
             </Link>
-            <Link to="/about" className="hero-cta-secondary">
-              Learn More
+            <Link to="/sih/hive-monitoring" className="px-6 py-3 rounded-full font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2">
+              🤖 AI Hive Health
+            </Link>
+            <Link to="/verify/HB-2026-000001" className="px-6 py-3 rounded-full font-bold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2">
+              🛡️ Verify Honey Batch
             </Link>
           </div>
         </div>
       </section>
+
+      {/* ── SIH 2026 Innovation Highlights ────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-4 -mt-8 mb-12 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* AI Feature Card */}
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-purple-100 hover:shadow-2xl transition-all group">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                🤖
+              </div>
+              <span className="text-xs font-black px-3 py-1 bg-purple-100 text-purple-700 rounded-full uppercase tracking-wider">
+                SIH 2026 AI Service
+              </span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">AI Hive Health & Varroa Screening</h3>
+            <p className="text-gray-600 text-sm mb-5 leading-relaxed">
+              MobileNetV2 deep learning scans bee images for Varroa mite infestation risks in seconds, combined with live IoT temperature, humidity, and battery telemetry.
+            </p>
+            <Link
+              to="/sih/hive-monitoring"
+              className="inline-flex items-center gap-2 font-bold text-purple-600 hover:text-purple-800 text-sm group-hover:translate-x-1 transition-all"
+            >
+              Launch Hive Monitoring Dashboard &rarr;
+            </Link>
+          </div>
+
+          {/* Blockchain Feature Card */}
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-emerald-100 hover:shadow-2xl transition-all group">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                🛡️
+              </div>
+              <span className="text-xs font-black px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full uppercase tracking-wider">
+                Polygon Amoy On-Chain
+              </span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Blockchain QR Honey Traceability</h3>
+            <p className="text-gray-600 text-sm mb-5 leading-relaxed">
+              Every jar has an immutable smart contract record and cryptographic Agriculture ID proof. Scan or click to verify 100% pure raw honey origin with zero login required.
+            </p>
+            <Link
+              to="/verify/HB-2026-000001"
+              className="inline-flex items-center gap-2 font-bold text-emerald-600 hover:text-emerald-800 text-sm group-hover:translate-x-1 transition-all"
+            >
+              Verify Sample Batch (HB-2026-000001) &rarr;
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Farmers and Consumers Section */}
       <div className="max-w-6xl mx-auto px-4 py-12">

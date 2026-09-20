@@ -270,6 +270,45 @@ const Applications = () => {
           </div>
         )}
 
+        {/* ── SIH 2026 Quick Actions ─────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div 
+            onClick={() => navigate('/seller/batches')}
+            className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-200/60 rounded-2xl p-5 hover:shadow-lg transition-all cursor-pointer flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                🍯
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-base">Honey Batches & Blockchain QR</h4>
+                <p className="text-xs text-gray-600">Register honey harvest, mint Polygon smart contract records & download labels</p>
+              </div>
+            </div>
+            <span className="text-amber-700 font-bold text-sm group-hover:translate-x-1 transition-transform">
+              Open &rarr;
+            </span>
+          </div>
+
+          <div 
+            onClick={() => navigate('/sih/hive-monitoring')}
+            className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-200/60 rounded-2xl p-5 hover:shadow-lg transition-all cursor-pointer flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                🤖
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 text-base">AI Hive Monitoring & Disease Vision</h4>
+                <p className="text-xs text-gray-600">MobileNetV2 image screening for Varroa mites & real-time IoT sensor telemetry</p>
+              </div>
+            </div>
+            <span className="text-purple-700 font-bold text-sm group-hover:translate-x-1 transition-transform">
+              Open &rarr;
+            </span>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
