@@ -18,9 +18,13 @@ import {
   Activity,
   Droplets,
   Zap,
-  Info
+  Info,
+  QrCode,
+  Download,
+  Printer
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { generateQRCodeDataURL, downloadQRCode, printHoneyJarLabel } from '../utils/qrCode';
 
 interface TraceStep {
   title: string;
@@ -82,6 +86,7 @@ export const VerifyHoneyBatch: React.FC = () => {
     { name: string; passed: boolean; message: string }[]
   >([]);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
 
   useEffect(() => {
     let isCancelled = false;
@@ -395,6 +400,21 @@ export const VerifyHoneyBatch: React.FC = () => {
         setData(verifiedPayload);
         setVerified(true);
         setLoading(false);
+
+        // Generate high-resolution QR Data URL for display & download
+        try {
+          const origin = typeof window !== 'undefined' ? window.location.origin : 'https://beebridge.vercel.app';
+          const verificationUrl = `${origin}/verify/${verifiedPayload.batchCode}`;
+          const qrUrl = await generateQRCodeDataURL(verificationUrl, {
+            width: 320,
+            margin: 2,
+            darkColor: '#1F160E',
+            lightColor: '#FFFFFF'
+          });
+          setQrDataUrl(qrUrl);
+        } catch (qrErr) {
+          console.error('Failed to generate verification QR code:', qrErr);
+        }
       }
     }
 
@@ -616,6 +636,89 @@ export const VerifyHoneyBatch: React.FC = () => {
                   </div>
                   <p className="font-black text-emerald-700 text-base">{data.qualityStatus}</p>
                   <p className="text-[11px] text-gray-500">{data.purityScore}% Purity Score</p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Official SIH HoneyChain QR Stamp Card ────────────────────── */}
+            <div className="bg-white rounded-3xl border-2 border-amber-300/80 shadow-lg p-6 sm:p-8 space-y-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider px-4 py-1.5 rounded-bl-2xl shadow-sm">
+                Official SIH QR Stamp
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                {/* QR Code Frame */}
+                <div className="flex flex-col items-center flex-shrink-0">
+                  <div className="p-3 bg-white border-2 border-amber-400 rounded-2xl shadow-md">
+                    {qrDataUrl ? (
+                      <img
+                        src={qrDataUrl}
+                        alt={`QR Code for ${data.batchCode}`}
+                        className="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg"
+                      />
+                    ) : (
+                      <div className="w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center bg-gray-100 rounded-lg">
+                        <QrCode className="w-12 h-12 text-gray-400 animate-pulse" />
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-mono text-gray-400 mt-2">
+                    SCAN WITH ANY PHONE CAMERA
+                  </span>
+                </div>
+
+                {/* QR Description and Actions */}
+                <div className="space-y-4 flex-1 text-center md:text-left">
+                  <div>
+                    <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200 mb-1.5">
+                      <QrCode className="w-3 h-3" />
+                      Tamper-Proof Honey Jar Seal
+                    </span>
+                    <h3 className="text-xl font-black text-gray-900">
+                      Consumer Verification QR Code
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed mt-1">
+                      This QR code is affixed to every jar of batch <strong className="text-gray-900 font-mono">{data.batchCode}</strong>. Customers scan this QR code on the physical jar to instantly verify farm-to-bottle traceability, blockchain consensus, and lab purity without logging in.
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap gap-2.5 justify-center md:justify-start pt-1">
+                    <button
+                      onClick={() => downloadQRCode(data.batchCode, 'png')}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-sm hover:shadow transition-all"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download QR (PNG)</span>
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        printHoneyJarLabel({
+                          batchCode: data.batchCode,
+                          hiveCode: data.hiveCode,
+                          variety: data.variety,
+                          harvestDate: data.harvestDate,
+                          qualityGrade: data.qualityGrade,
+                          farmerName: data.beekeeperName,
+                          sourceLocation: data.sourceLocation,
+                          blockchainTxHash: data.blockchainTx,
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs shadow-sm hover:shadow transition-all"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      <span>Print 4x4 Jar Label</span>
+                    </button>
+
+                    <button
+                      onClick={handleCopyLink}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs transition-colors"
+                    >
+                      {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5 text-gray-600" />}
+                      <span>{copiedLink ? 'Link Copied' : 'Copy Public URL'}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

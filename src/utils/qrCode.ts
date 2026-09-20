@@ -85,6 +85,34 @@ export function downloadQRCodeFile(
 }
 
 /**
+ * Convenience download helper by batchCode
+ */
+export async function downloadQRCode(
+  batchCode: string,
+  format: 'png' | 'svg' = 'png'
+): Promise<void> {
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://beebridge.vercel.app';
+  const url = `${origin}/verify/${batchCode}`;
+  if (format === 'svg') {
+    const svg = await generateQRCodeSVG(url);
+    downloadQRCodeFile(svg, `honey-batch-${batchCode}`, 'svg');
+  } else {
+    const png = await generateQRCodeDataURL(url, { width: 500 });
+    downloadQRCodeFile(png, `honey-batch-${batchCode}`, 'png');
+  }
+}
+
+/**
+ * Convenience print helper by BatchLabelInfo
+ */
+export async function printHoneyJarLabel(info: BatchLabelInfo): Promise<void> {
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://beebridge.vercel.app';
+  const url = `${origin}/verify/${info.batchCode}`;
+  const qrDataUrl = await generateQRCodeDataURL(url, { width: 400 });
+  printQRCodeLabel(qrDataUrl, info);
+}
+
+/**
  * Print Honey Batch authenticity label with QR code
  */
 export function printQRCodeLabel(

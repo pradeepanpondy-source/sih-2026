@@ -4,11 +4,13 @@ import fndImage from '../assets/fnd.png';
 import heroBg from '../assets/hero-bg.png';
 import LetterWave from './LetterWave';
 import Testimonials from './Testimonials';
-import { X, Clock } from 'lucide-react';
+import { X, Clock, QrCode } from 'lucide-react';
+import { generateQRCodeDataURL } from '../utils/qrCode';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [showSellerBanner, setShowSellerBanner] = useState(false);
+  const [sampleQrUrl, setSampleQrUrl] = useState<string>('');
   const location = useLocation();
 
   useEffect(() => {
@@ -18,6 +20,12 @@ export default function HomeScreen() {
       // Clear state so banner doesn't reappear on re-render
       window.history.replaceState({}, document.title);
     }
+
+    // Generate sample batch QR code for immediate homepage preview
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://beebridge.vercel.app';
+    generateQRCodeDataURL(`${origin}/verify/HB-2026-000001`, { width: 180, margin: 1 })
+      .then(url => setSampleQrUrl(url))
+      .catch(() => {});
 
     // Check if user came from login (mobile redirect)
     const fromLogin = sessionStorage.getItem('fromLogin');
@@ -142,19 +150,40 @@ export default function HomeScreen() {
           </div>
 
           {/* Blockchain Feature Card */}
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-emerald-100 hover:shadow-2xl transition-all group">
-            <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                🛡️
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-emerald-100 hover:shadow-2xl transition-all group flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                  🛡️
+                </div>
+                <span className="text-xs font-black px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full uppercase tracking-wider">
+                  Polygon Amoy On-Chain
+                </span>
               </div>
-              <span className="text-xs font-black px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full uppercase tracking-wider">
-                Polygon Amoy On-Chain
-              </span>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Blockchain QR Honey Traceability</h3>
+              <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                Every jar has an immutable smart contract record and cryptographic Agriculture ID proof. Scan or click to verify 100% pure raw honey origin with zero login required.
+              </p>
+
+              {/* Mini QR Preview Box */}
+              <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3 mb-4 flex items-center gap-3.5">
+                <div className="w-16 h-16 bg-white border border-emerald-300 rounded-xl p-1 flex-shrink-0 flex items-center justify-center shadow-xs">
+                  {sampleQrUrl ? (
+                    <img src={sampleQrUrl} alt="Sample QR" className="w-full h-full object-contain" />
+                  ) : (
+                    <QrCode className="w-8 h-8 text-emerald-600 animate-pulse" />
+                  )}
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-mono text-emerald-800 font-bold uppercase tracking-wider bg-emerald-100 px-1.5 py-0.5 rounded">
+                    Sample Jar Label
+                  </span>
+                  <p className="text-xs font-bold text-gray-800 mt-1 font-mono">HB-2026-000001</p>
+                  <p className="text-[11px] text-gray-500">Scan with smartphone camera</p>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Blockchain QR Honey Traceability</h3>
-            <p className="text-gray-600 text-sm mb-5 leading-relaxed">
-              Every jar has an immutable smart contract record and cryptographic Agriculture ID proof. Scan or click to verify 100% pure raw honey origin with zero login required.
-            </p>
+
             <Link
               to="/verify/HB-2026-000001"
               className="inline-flex items-center gap-2 font-bold text-emerald-600 hover:text-emerald-800 text-sm group-hover:translate-x-1 transition-all"
