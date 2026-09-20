@@ -33,6 +33,9 @@ import { CartProvider } from "./context/CartContext";
 import { useAuth } from "./hooks/useAuth";
 import LoadingSkeleton from "./components/LoadingSkeleton";
 import SellerGuard from "./components/SellerGuard";
+import { VerifyHoneyBatch } from "./components/VerifyHoneyBatch";
+import { SellerBatches } from "./components/SellerBatches";
+import { HiveMonitoringDashboard } from "./components/HiveMonitoringDashboard";
 
 const sellerBackground = 'https://media.istockphoto.com/id/1669258600/vector/illustration-of-delicious-melted-chocolate-on-white-background.jpg?s=612x612&w=0&k=20&c=oykGVJHBjHuevHVi2GE8jFmCe0EpX2unEfhMPCFFeik=';
 
@@ -71,6 +74,12 @@ function AppRoutes() {
       <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
       <Route path="/privacy-policy"       element={<PrivacyPolicy />} />
 
+      {/* ── Public Honey Authenticity Verification (No Login Required) ── */}
+      <Route path="/verify/:batchId"      element={<VerifyHoneyBatch />} />
+
+      {/* ── SIH AI Hive Monitoring & Disease Detection ────────── */}
+      <Route path="/sih/hive-monitoring"  element={<HiveMonitoringDashboard />} />
+
       {/* ── Protected routes (require login) ──────────────────── */}
       <Route path="/home"         element={user ? <PageLayout><HomeScreen /></PageLayout>            : <Navigate to="/login" />} />
       <Route path="/about"        element={user ? <PageLayout><About /></PageLayout>                 : <Navigate to="/login" />} />
@@ -85,12 +94,13 @@ function AppRoutes() {
       <Route path="/product/beehive" element={user ? <PageLayout><ProductDetails /></PageLayout>    : <Navigate to="/login" />} />
 
       {/* ── Seller-guarded routes ─────────────────────────────── */}
-      <Route path="/applications" element={user ? <SellerGuard><Applications /></SellerGuard>   : <Navigate to="/login" />} />
-      <Route path="/orders"       element={user ? <SellerGuard><Orders /></SellerGuard>          : <Navigate to="/login" />} />
-      <Route path="/settings"     element={user ? <SellerGuard><Settings /></SellerGuard>        : <Navigate to="/login" />} />
-      <Route path="/products"     element={user ? <SellerGuard><SellerProducts /></SellerGuard>  : <Navigate to="/login" />} />
-      <Route path="/analytics"    element={user ? <SellerGuard><SellerAnalytics /></SellerGuard> : <Navigate to="/login" />} />
-      <Route path="/earnings"     element={user ? <SellerGuard><SellerEarnings /></SellerGuard>  : <Navigate to="/login" />} />
+      <Route path="/applications"   element={user ? <SellerGuard><Applications /></SellerGuard>     : <Navigate to="/login" />} />
+      <Route path="/seller/batches" element={user ? <SellerGuard><SellerBatches /></SellerGuard>   : <Navigate to="/login" />} />
+      <Route path="/orders"         element={user ? <SellerGuard><Orders /></SellerGuard>            : <Navigate to="/login" />} />
+      <Route path="/settings"       element={user ? <SellerGuard><Settings /></SellerGuard>          : <Navigate to="/login" />} />
+      <Route path="/products"       element={user ? <SellerGuard><SellerProducts /></SellerGuard>    : <Navigate to="/login" />} />
+      <Route path="/analytics"      element={user ? <SellerGuard><SellerAnalytics /></SellerGuard>   : <Navigate to="/login" />} />
+      <Route path="/earnings"       element={user ? <SellerGuard><SellerEarnings /></SellerGuard>    : <Navigate to="/login" />} />
 
       {/* Catch-all */}
       <Route path="*" element={<Navigate to={user ? "/home" : "/login"} replace />} />

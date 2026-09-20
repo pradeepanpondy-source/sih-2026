@@ -99,6 +99,46 @@ app.post('/api/verify-payment', (req, res) => {
   }
 });
 
+// ─── POST /api/sih/iot/telemetry ──────────────────────────────────────────
+const handleTelemetry = (req, res) => {
+  try {
+    const { hive_id, hive_code, temperature = 34.5, humidity = 62.0, battery = 95.0, is_demo = false } = req.body || {};
+    const code = (hive_code || hive_id || 'HIVE-000001').toUpperCase();
+    const tempNum = Number(temperature);
+    const humNum = Number(humidity);
+    const batNum = Number(battery);
+
+    const alerts = [];
+    if (tempNum > 38.0) {
+      alerts.push({ alert_type: 'High Temperature', severity: 'critical', title: `Brood Temp Spike: ${tempNum}°C` });
+    } else if (tempNum < 31.0) {
+      alerts.push({ alert_type: 'Low Temperature', severity: 'warning', title: `Low Temp: ${tempNum}°C` });
+    }
+    if (humNum < 45.0) {
+      alerts.push({ alert_type: 'Low Humidity', severity: 'warning', title: `Low Humidity: ${humNum}%` });
+    }
+
+    console.log(`[iot-telemetry] ✅ ${code} - Temp: ${tempNum}°C, Hum: ${humNum}%, Bat: ${batNum}% (Alerts: ${alerts.length})`);
+    return res.status(200).json({
+      success: true,
+      data: {
+        hive_code: code,
+        temperature: tempNum,
+        humidity: humNum,
+        battery: batNum,
+        is_demo: Boolean(is_demo),
+        alerts_triggered: alerts,
+        recorded_at: new Date().toISOString(),
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || 'Telemetry error' });
+  }
+};
+
+app.post('/api/sih/iot/telemetry', handleTelemetry);
+app.post('/api/sih-iot-telemetry', handleTelemetry);
+
 // ─── Proxy any other /api/* to a helpful message ──────────────────────────────
 app.use('/api', (req, res) => {
   res.status(404).json({ error: `No local handler for ${req.method} ${req.path}` });

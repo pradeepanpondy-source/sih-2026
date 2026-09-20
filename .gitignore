@@ -53,3 +53,9 @@ coverage
 blockchain/artifacts/
 blockchain/cache/
 blockchain/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+ai_service/__pycache__/

@@ -33,6 +33,8 @@ const SellerLayout: React.FC<SellerLayoutProps> = ({ children, title }) => {
 
     const navItems = [
         { path: '/applications', icon: '📊', label: 'Dashboard' },
+        { path: '/seller/batches', icon: '🍯', label: 'Honey Batches' },
+        { path: '/sih/hive-monitoring', icon: '🤖', label: 'AI Hive Health' },
         { path: '/earnings', icon: '💰', label: 'Earnings' },
         { path: '/orders', icon: '🛒', label: 'Orders' },
         { path: '/analytics', icon: '📈', label: 'Analytics' },

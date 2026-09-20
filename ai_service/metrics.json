@@ -1,0 +1,42 @@
+{
+  "model_version": "mobilenetv2-varroa-v1.0",
+  "base_architecture": "MobileNetV2 Transfer Learning",
+  "evaluation_timestamp": "2026-09-20T11:39:45.745445Z",
+  "dataset_split": {
+    "total_samples": 500,
+    "train_samples": 1050,
+    "val_samples": 75,
+    "test_samples": 75
+  },
+  "metrics": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0
+  },
+  "confusion_matrix": {
+    "matrix": [
+      [
+        44,
+        0
+      ],
+      [
+        0,
+        31
+      ]
+    ],
+    "labels": [
+      "Healthy (0)",
+      "Possible Varroa Risk (1)"
+    ],
+    "true_negatives": 44,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "true_positives": 31
+  },
+  "target_classes": [
+    "Healthy",
+    "Possible Varroa Risk"
+  ],
+  "confidence_threshold": 0.75
+}

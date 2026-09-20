@@ -1,15 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   CheckCircle, Package, Truck, Mail, Phone,
   MapPin, Calendar, Download, Printer, Send,
-  ArrowLeft, ShieldCheck
+  ArrowLeft, ShieldCheck, QrCode, ExternalLink
 } from 'lucide-react';
+import { generateQRCodeDataURL } from '../utils/qrCode';
 
 export interface ReceiptItem {
   name: string;
   price: number;
   quantity: number;
   image_url?: string;
+  batch_id?: string;
 }
 
 export interface ReceiptData {
@@ -33,6 +35,8 @@ export interface ReceiptData {
   estimatedDelivery?: string;
   razorpayPaymentId?: string;
   razorpayOrderId?: string;
+  honeyBatchId?: string;
+  honeyBatchCode?: string;
 }
 
 interface OrderReceiptProps {
@@ -60,6 +64,25 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
   data, onClose, onEmailResend, emailSending
 }) => {
   const receiptRef = useRef<HTMLDivElement>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
+
+  const batchCode = data.honeyBatchCode || data.honeyBatchId || 'HB-2026-000001';
+
+  useEffect(() => {
+    let isMounted = true;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://beebridge.vercel.app';
+    const verifyUrl = `${origin}/verify/${batchCode}`;
+
+    generateQRCodeDataURL(verifyUrl, { width: 300, margin: 1 })
+      .then((url) => {
+        if (isMounted) setQrDataUrl(url);
+      })
+      .catch((err) => console.error('Error generating receipt QR code', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [batchCode]);
 
   // ── Print / PDF ────────────────────────────────────────────
   const handlePrint = () => {
@@ -327,6 +350,50 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
               )}
             </div>
           )}
+
+          {/* ── HoneyChain Blockchain Authenticity & Traceability ──── */}
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50/70 border-2 border-amber-200/90 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div className="space-y-2 text-center sm:text-left">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100/90 text-amber-900 text-[10px] font-extrabold uppercase tracking-wider border border-amber-300/60">
+                <span>🛡️ Blockchain Authenticity Verified</span>
+              </div>
+              <h4 className="text-sm font-black text-gray-900">
+                Honey Batch ID: <span className="font-mono text-amber-800">{batchCode}</span>
+              </h4>
+              <p className="text-xs text-gray-600 max-w-sm leading-relaxed">
+                Every honey jar from Bee Bridge is harvested by government-verified beekeepers and anchored to Polygon Amoy Blockchain.
+              </p>
+              <div className="pt-0.5 flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                <a
+                  href={`/verify/${batchCode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 hover:text-amber-900 underline"
+                >
+                  <span>Verify online: /verify/{batchCode}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
+            {/* QR Code Container */}
+            <div className="flex flex-col items-center flex-shrink-0 bg-white p-3 rounded-2xl border border-amber-200/90 shadow-sm text-center">
+              <div className="w-24 h-24 flex items-center justify-center">
+                {qrDataUrl ? (
+                  <img
+                    src={qrDataUrl}
+                    alt={`QR Code for ${batchCode}`}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <div className="w-6 h-6 border-2 border-amber-400 border-t-amber-600 rounded-full animate-spin" />
+                )}
+              </div>
+              <span className="text-[10px] font-bold text-gray-600 mt-1 max-w-[120px] leading-tight">
+                Scan to verify authenticity.
+              </span>
+            </div>
+          </div>
 
           {/* Delivery banner */}
           <div className="flex items-center gap-3 bg-amber-50 border border-amber-100 rounded-xl p-4">
